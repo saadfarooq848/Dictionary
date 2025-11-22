@@ -10,23 +10,27 @@ async function wordMeaning(params) {
   word = inputword.value;
 
   // Diciotnary
-  let url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
-  let current = await fetch(url, {
-    headers: {
-      Accept: "application/json",
-    },
-  });
-
-  data = await current.json();
-
   try {
-    meaning.innerHTML = `Meaning: ${data[0].meanings[0].definitions[0].definition}`;
-    example.innerHTML = `Example: ${
-      data[0].meanings[0].definitions[0].example || "No Example"
-    }`;
+    let url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+    let current = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    data = await current.json();
+
+    try {
+      meaning.innerHTML = `Meaning: ${data[0].meanings[0].definitions[0].definition}`;
+      example.innerHTML = `Example: ${
+        data[0].meanings[0].definitions[0].example || "No Example"
+      }`;
+    } catch {
+      meaning.innerHTML = "Invalid Word";
+      example.innerHTML = "";
+    }
   } catch {
-    meaning.innerHTML = "Invalid Word";
-    example.innerHTML = "";
+    document.body.innerHTML = "Error! 404";
   }
 
   console.log(data);
